@@ -37,7 +37,7 @@
             justify-content: center;
             padding-top: 4rem;
             padding-bottom: 4rem;
-            overflow-y: auto; /* Allow scrolling within a slide if content overflows */
+            overflow: hidden; /* Changed from auto to hidden to prevent internal scrollbars */
         }
 
         h1, h2, h3, h4, h5, h6 {
@@ -96,14 +96,15 @@
         .scroll-down {
             position: absolute;
             bottom: 2rem;
-            right: 5rem;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 20;
             animation: bounce-vertical 2s infinite;
         }
         @keyframes bounce-vertical {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-15px); }
-            60% { transform: translateY(-7px); }
+            0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+            40% { transform: translate(-50%, -15px); }
+            60% { transform: translate(-50%, -7px); }
         }
 
         /* Logo Carousel Animation */
@@ -128,6 +129,41 @@
         .mask-image-horizontal {
             -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
             mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+        }
+
+        /* Industry Logo Tooltip */
+        .industry-card {
+            position: relative;
+        }
+        .industry-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background-color: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 30;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+            width: max-content;
+        }
+        .industry-card:hover .industry-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-10px);
+        }
+        .industry-tooltip img {
+            height: 32px;
+            width: auto;
+            max-width: 100px;
+            object-fit: contain;
         }
         
         /* Feature Hub Styles */
@@ -277,7 +313,7 @@
 
     <div class="presentation-container">
         <!-- Slide 1: Home -->
-        <header id="home" class="slide brand-gradient text-white overflow-hidden">
+        <header id="home" class="slide brand-gradient text-white">
             <div class="container mx-auto px-4 md:px-8 relative z-10 w-full">
                 <div class="grid md:grid-cols-2 items-center">
                     <div class="text-center md:text-left">
@@ -383,18 +419,114 @@
                                 <h2 class="text-3xl font-bold text-navy">Powering 60+ Industries</h2>
                                 <p class="text-base text-gray-600 my-6">BigChange is the trusted platform for businesses that operate on the road, from local specialists to national enterprises.</p>
                                 <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105"><span class="icon text-energy-blue text-2xl">build</span><h3 class="font-semibold text-navy mt-1 text-xs">Maintenance</h3></div>
-                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105"><span class="icon text-energy-blue text-2xl">construction</span><h3 class="font-semibold text-navy mt-1 text-xs">Construction</h3></div>
-                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105"><span class="icon text-energy-blue text-2xl">electrical_services</span><h3 class="font-semibold text-navy mt-1 text-xs">Electrical</h3></div>
-                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105"><span class="icon text-energy-blue text-2xl">plumbing</span><h3 class="font-semibold text-navy mt-1 text-xs">Plumbing</h3></div>
-                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105"><span class="icon text-energy-blue text-2xl">water_drop</span><h3 class="font-semibold text-navy mt-1 text-xs">Drainage</h3></div>
-                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105"><span class="icon text-energy-blue text-2xl">grass</span><h3 class="font-semibold text-navy mt-1 text-xs">Grounds Maint.</h3></div>
-                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105"><span class="icon text-energy-blue text-2xl">local_fire_department</span><h3 class="font-semibold text-navy mt-1 text-xs">Fire & Security</h3></div>
-                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105"><span class="icon text-energy-blue text-2xl">engineering</span><h3 class="font-semibold text-navy mt-1 text-xs">Field Service</h3></div>
-                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105"><span class="icon text-energy-blue text-2xl">warehouse</span><h3 class="font-semibold text-navy mt-1 text-xs">Hire</h3></div>
-                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105"><span class="icon text-energy-blue text-2xl">door_sliding</span><h3 class="font-semibold text-navy mt-1 text-xs">Industrial Doors</h3></div>
-                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105"><span class="icon text-energy-blue text-2xl">pest_control</span><h3 class="font-semibold text-navy mt-1 text-xs">Pest Control</h3></div>
-                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105"><span class="icon text-energy-blue text-2xl">apartment</span><h3 class="font-semibold text-navy mt-1 text-xs">Facilities Mgmt</h3></div>
+                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105 industry-card">
+                                        <span class="icon text-energy-blue text-2xl">build</span>
+                                        <h3 class="font-semibold text-navy mt-1 text-xs">Maintenance</h3>
+                                        <div class="industry-tooltip">
+                                            <img src="https://iili.io/KG2AnRf.md.png" alt="Maintenance Logo 1">
+                                            <img src="https://iili.io/KG2AoN4.png" alt="Maintenance Logo 2">
+                                            <img src="https://iili.io/KG2AxDl.png" alt="Maintenance Logo 3">
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105 industry-card">
+                                        <span class="icon text-energy-blue text-2xl">construction</span>
+                                        <h3 class="font-semibold text-navy mt-1 text-xs">Construction</h3>
+                                        <div class="industry-tooltip">
+                                            <img src="https://iili.io/KG2uMas.md.png" alt="Construction Logo 1">
+                                            <img src="https://iili.io/KG2uGFn.md.png" alt="Construction Logo 2">
+                                            <img src="https://iili.io/KG2uV8G.md.png" alt="Construction Logo 3">
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105 industry-card">
+                                        <span class="icon text-energy-blue text-2xl">electrical_services</span>
+                                        <h3 class="font-semibold text-navy mt-1 text-xs">Electrical</h3>
+                                        <div class="industry-tooltip">
+                                            <img src="https://iili.io/KG2uOnS.png" alt="Electrical Logo 1">
+                                            <img src="https://iili.io/KG2ueM7.md.png" alt="Electrical Logo 2">
+                                            <img src="https://iili.io/KG2ukP9.md.png" alt="Electrical Logo 3">
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105 industry-card">
+                                        <span class="icon text-energy-blue text-2xl">plumbing</span>
+                                        <h3 class="font-semibold text-navy mt-1 text-xs">Plumbing</h3>
+                                        <div class="industry-tooltip">
+                                            <img src="https://iili.io/KG2A7Uu.png" alt="Plumbing Logo 1">
+                                            <img src="https://iili.io/KG2AcRj.md.png" alt="Plumbing Logo 2">
+                                            <img src="https://iili.io/KG2AlOx.md.png" alt="Plumbing Logo 3">
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105 industry-card">
+                                        <span class="icon text-energy-blue text-2xl">water_drop</span>
+                                        <h3 class="font-semibold text-navy mt-1 text-xs">Drainage</h3>
+                                        <div class="industry-tooltip">
+                                            <img src="https://iili.io/KG2ulnI.md.png" alt="Drainage Logo 1">
+                                            <img src="https://iili.io/KG2ujwl.png" alt="Drainage Logo 2">
+                                            <img src="https://iili.io/KG2uwt2.md.png" alt="Drainage Logo 3">
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105 industry-card">
+                                        <span class="icon text-energy-blue text-2xl">grass</span>
+                                        <h3 class="font-semibold text-navy mt-1 text-xs">Grounds Maint.</h3>
+                                        <div class="industry-tooltip">
+                                            <img src="https://iili.io/KG2utKF.png" alt="Grounds Maintenance Logo 1">
+                                            <img src="https://iili.io/KG2upHJ.md.png" alt="Grounds Maintenance Logo 2">
+                                            <img src="https://iili.io/KG2A9NR.md.png" alt="Grounds Maintenance Logo 3">
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105 industry-card">
+                                        <span class="icon text-energy-blue text-2xl">local_fire_department</span>
+                                        <h3 class="font-semibold text-navy mt-1 text-xs">Fire & Security</h3>
+                                        <div class="industry-tooltip">
+                                            <img src="https://iili.io/KG2ur9j.md.png" alt="Fire & Security Logo 1">
+                                            <img src="https://iili.io/KG2u6wQ.png" alt="Fire & Security Logo 2">
+                                            <img src="https://iili.io/KG2uPtV.png" alt="Fire & Security Logo 3">
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105 industry-card">
+                                        <span class="icon text-energy-blue text-2xl">engineering</span>
+                                        <h3 class="font-semibold text-navy mt-1 text-xs">Field Service</h3>
+                                        <div class="industry-tooltip">
+                                            <img src="https://iili.io/KG2u8Fe.png" alt="Field Service Logo 1">
+                                            <img src="https://iili.io/KG2uScu.png" alt="Field Service Logo 2">
+                                            <img src="https://iili.io/KG2uU8b.png" alt="Field Service Logo 3">
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105 industry-card">
+                                        <span class="icon text-energy-blue text-2xl">warehouse</span>
+                                        <h3 class="font-semibold text-navy mt-1 text-xs">Hire</h3>
+                                        <div class="industry-tooltip">
+                                            <img src="https://iili.io/KG2AHtp.png" alt="Hire Logo 1">
+                                            <img src="https://iili.io/KG2AdoN.png" alt="Hire Logo 2">
+                                            <img src="https://iili.io/KG2AKKX.png" alt="Hire Logo 3">
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105 industry-card">
+                                        <span class="icon text-energy-blue text-2xl">door_sliding</span>
+                                        <h3 class="font-semibold text-navy mt-1 text-xs">Industrial Doors</h3>
+                                        <div class="industry-tooltip">
+                                            <img src="https://iili.io/KG2Afln.png" alt="Industrial Doors Logo 1">
+                                            <img src="https://iili.io/KG2AqSs.png" alt="Industrial Doors Logo 2">
+                                            <img src="https://iili.io/KG2ACHG.png" alt="Industrial Doors Logo 3">
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105 industry-card">
+                                        <span class="icon text-energy-blue text-2xl">pest_control</span>
+                                        <h3 class="font-semibold text-navy mt-1 text-xs">Pest Control</h3>
+                                        <div class="industry-tooltip">
+                                            <img src="https://iili.io/KG2AIx2.png" alt="Pest Control Logo 1">
+                                            <img src="https://iili.io/KG2ARf9.png" alt="Pest Control Logo 2">
+                                            <img src="https://iili.io/KG2A5le.png" alt="Pest Control Logo 3">
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg text-center transition-transform hover:scale-105 industry-card">
+                                        <span class="icon text-energy-blue text-2xl">apartment</span>
+                                        <h3 class="font-semibold text-navy mt-1 text-xs">Facilities Mgmt</h3>
+                                        <div class="industry-tooltip">
+                                            <img src="https://iili.io/KG2usoB.png" alt="Facilities Management Logo 1">
+                                            <img src="https://iili.io/KG2uLMP.png" alt="Facilities Management Logo 2">
+                                            <img src="https://iili.io/KG2uQP1.png" alt="Facilities Management Logo 3">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -500,13 +632,13 @@
                                     <h3 class="text-xl font-bold text-navy mb-2">CRM</h3>
                                 </div>
                             </div>
-                             <div class="flex justify-center items-center">
+                            <div class="flex justify-center items-center">
                                 <div class="workflow-node bg-white p-6 rounded-lg shadow-lg text-center w-64">
                                     <img src="https://iili.io/K19b5gI.md.png" alt="Scheduling" class="w-full h-32 object-contain rounded-md mb-4">
                                     <h3 class="text-xl font-bold text-navy mb-2">Scheduling</h3>
                                 </div>
                             </div>
-                             <div class="flex justify-center items-center">
+                            <div class="flex justify-center items-center">
                                 <div class="workflow-node bg-white p-6 rounded-lg shadow-lg text-center w-64">
                                     <img src="https://iili.io/K19ba5X.md.png" alt="Mobile App" class="w-full h-32 object-contain rounded-md mb-4">
                                     <h3 class="text-xl font-bold text-navy mb-2">Mobile App</h3>
@@ -531,7 +663,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
                         <!-- Left Column: Text -->
                         <div>
-                             <div class="text-center md:text-left">
+                            <div class="text-center md:text-left">
                                 <img src="https://iili.io/K1GQoEQ.md.png" alt="BigChange Logo" class="h-12 mb-4 mx-auto md:mx-0 invert">
                                 <h2 class="text-4xl font-bold text-white">The Future is Intelligent Automation</h2>
                                 <p class="text-lg text-gray-300 mt-6">
@@ -590,7 +722,7 @@
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div class="lg:col-span-2">
-                           <div class="grid grid-cols-12">
+                            <div class="grid grid-cols-12">
                                 <div class="col-span-3 space-y-2 pr-4 text-right text-sm font-semibold">
                                     <div class="h-12 flex items-center justify-end text-navy">Discovery &amp; Planning</div>
                                     <div class="h-12 flex items-center justify-end text-navy">Pilot Training &amp; Soft Go-Live</div>
@@ -619,15 +751,100 @@
                             <p id="gantt-description" class="text-sm text-gray-700"></p>
                         </div>
                     </div>
-                     <div class="border-t mt-6 pt-4">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="bg-white p-4 rounded-lg shadow-lg text-center"><img src="https://i.postimg.cc/CMPcgpQG/655f5ff114bac7a6c1449f8d-tab-2-guy-on-computer.jpg" alt="Support" class="w-full h-32 object-cover rounded-md mb-2"><h4 class="text-lg font-bold text-navy mb-1">24/7 UK-Based Support</h4><p class="text-gray-700 text-xs">Our support team is available 24/7 to provide assistance whenever you need it.</p></div><div class="bg-white p-4 rounded-lg shadow-lg text-center"><img src="https://i.postimg.cc/C5Tx2xqF/Implementation.png" alt="Onboarding" class="w-full h-32 object-cover rounded-md mb-2"><h4 class="text-lg font-bold text-navy mb-1">Dedicated Onboarding</h4><p class="text-gray-700 text-xs">An Onboarding Manager will guide you through every step of the implementation process.</p></div><div class="bg-white p-4 rounded-lg shadow-lg text-center"><img src="https://i.postimg.cc/vB9Q5wSC/Customer_Success.jpg" alt="Success" class="w-full h-32 object-cover rounded-md mb-2"><h4 class="text-lg font-bold text-navy mb-1">Lifetime Customer Success</h4><p class="text-gray-700 text-xs">A Customer Success Manager will be your long-term partner for continuous improvement.</p></div></div>
+                    <div class="border-t mt-6 pt-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-white p-4 rounded-lg shadow-lg text-center">
+                                <img src="https://i.postimg.cc/C5Tx2xqF/Implementation.png" alt="Onboarding" class="w-full h-32 object-cover rounded-md mb-2">
+                                <h4 class="text-lg font-bold text-navy mb-1">Dedicated Onboarding</h4>
+                                <p class="text-gray-700 text-xs">An Onboarding Manager will guide you through every step of the implementation process.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-lg text-center">
+                                <img src="https://i.postimg.cc/CxYMftq9/PP3.jpg" alt="Project Portal" class="w-full h-32 object-cover object-top rounded-md mb-2">
+                                <h4 class="text-lg font-bold text-navy mb-1">BigChange Project Portal</h4>
+                                <p class="text-gray-700 text-xs">Stay in control of your onboarding journey. Our dedicated project portal gives you a real-time view of your progress, so you always know where things stand.</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-lg text-center">
+                                <img src="https://i.postimg.cc/8cG9nd4n/BCUSS.jpg" alt="BigChange University" class="w-full h-32 object-cover object-top rounded-md mb-2">
+                                <h4 class="text-lg font-bold text-navy mb-1">BigChange University (BCU)</h4>
+                                <p class="text-gray-700 text-xs">Become a certified expert with our structured learning paths. Progress from Core to Expert level on the BigChange LMS System.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <a href="#pricing" class="scroll-down"><span class="icon text-navy text-4xl">keyboard_arrow_down</span></a>
+                <a href="#support" class="scroll-down"><span class="icon text-navy text-4xl">keyboard_arrow_down</span></a>
             </section>
             <div class="page-break"></div>
-            
-            <!-- Slide 12: Pricing -->
+
+            <!-- Slide 12: UK-Based Support -->
+            <section id="support" class="slide bg-white overflow-hidden p-0 flex-col justify-start">
+                <div class="grid grid-cols-1 md:grid-cols-2 h-full items-center">
+                    <!-- Left Column: Text -->
+                    <div class="p-8 md:p-12 flex flex-col justify-center h-full">
+                        <div>
+                            <img src="https://iili.io/K1GQoEQ.md.png" alt="BigChange Logo" class="h-12 mb-4">
+                            <h2 class="text-4xl font-bold text-navy">24/7 UK-Based Support</h2>
+                            <h3 class="text-2xl font-bold text-energy-blue mt-4">Real People, Real Support, Right Here in Leeds.</h3>
+                            <p class="text-gray-700 mt-4">
+                                We're incredibly proud that our entire support operation is based in our Leeds headquarters. When you need help, you're not talking to a chatbot or a remote call centre; you're speaking with a BigChange expert who understands your business. Our friendly, knowledgeable team is here for you 24/7, providing the award-winning support that UK businesses trust.
+                            </p>
+                            <div class="mt-6 space-y-3">
+                                <div class="flex items-center text-navy"><span class="icon text-2xl mr-3">phone_in_talk</span><span class="font-semibold">24/7 Phone, Email & Live Chat</span></div>
+                                <div class="flex items-center text-navy"><span class="icon text-2xl mr-3">pin_drop</span><span class="font-semibold">Entirely based in our Leeds, UK HQ</span></div>
+                                <div class="flex items-center text-navy"><span class="icon text-2xl mr-3">school</span><span class="font-semibold">Expert, In-House and Fully Trained Team</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Column: Image -->
+                    <div class="h-full w-full hidden md:block">
+                        <img src="https://iili.io/KErc8eR.md.png" alt="BigChange UK Support Team" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                 <a href="#community" class="scroll-down"><span class="icon text-navy text-4xl">keyboard_arrow_down</span></a>
+            </section>
+            <div class="page-break"></div>
+
+            <!-- Slide 13: Community -->
+            <section id="community" class="slide bg-navy text-white overflow-hidden p-0">
+                <!-- Background Video -->
+                <div class="absolute top-0 left-0 w-full h-full z-0 pointer-events-none overflow-hidden">
+                    <video autoplay loop muted playsinline class="absolute top-1/2 left-1/2 w-auto h-auto min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover">
+                        <source src="https://sergemusicofficial.com/wp-content/uploads/2025/09/VideoWorkshop3.m4v" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <!-- Overlay -->
+                <div class="absolute top-0 left-0 w-full h-full bg-navy/70 z-10"></div>
+
+                <!-- Content -->
+                <div class="container mx-auto px-4 md:px-8 relative z-20 text-center flex flex-col justify-center h-full">
+                    <img src="https://i.postimg.cc/ydbgqXFm/Big-Change-White.png" alt="BigChange Logo" class="h-10 md:h-12 w-auto mb-6 mx-auto">
+                    <h2 class="text-4xl lg:text-5xl font-extrabold mb-4">Be Part Of Our BigChange Community</h2>
+                    <p class="text-lg text-gray-300 max-w-3xl mx-auto mb-8">
+                        More than just software, we're your partner in growth. We believe in the power of collaboration to drive success for your business.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                        <div class="bg-white/10 backdrop-blur-sm p-6 rounded-lg flex flex-col items-center text-center">
+                            <span class="icon text-green-accent text-4xl">groups</span>
+                            <h3 class="text-xl font-bold mt-3 mb-2">Collaborative Workshops</h3>
+                            <p class="text-sm text-gray-300">Join exclusive, hands-on workshops at our Leeds HQ. Connect with peers, share industry best practices, and discover new ways to leverage BigChange.</p>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm p-6 rounded-lg flex flex-col items-center text-center">
+                            <span class="icon text-green-accent text-4xl">model_training</span>
+                            <h3 class="text-xl font-bold mt-3 mb-2">Expert Guidance</h3>
+                            <p class="text-sm text-gray-300">Our Customer Success Team works side-by-side with you, helping refine workflows and implement powerful new strategies.</p>
+                        </div>
+                         <div class="bg-white/10 backdrop-blur-sm p-6 rounded-lg flex flex-col items-center text-center">
+                            <span class="icon text-green-accent text-4xl">handshake</span>
+                            <h3 class="text-xl font-bold mt-3 mb-2">A True Partnership</h3>
+                            <p class="text-sm text-gray-300">Your journey doesn't end at go-live. Our Customer Success team is your long-term partner, proactively helping you drive more value.</p>
+                        </div>
+                    </div>
+                </div>
+                 <a href="#pricing" class="scroll-down"><span class="icon text-white text-4xl">keyboard_arrow_down</span></a>
+            </section>
+            <div class="page-break"></div>
+
+            <!-- Slide 14: Pricing -->
             <section id="pricing" class="slide bg-white">
                 <div class="container mx-auto px-4 md:px-8">
                     <div class="text-center">
@@ -635,7 +852,7 @@
                         <h2 class="text-4xl font-bold text-navy">Pricing & Onboarding Packages</h2>
                         <p class="text-lg text-gray-600 max-w-3xl mx-auto mt-4 mb-8">Flexible software and support packages to match your business needs.</p>
                     </div>
-                    
+                
                     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
                         <!-- Back Office User -->
                         <div class="border rounded-lg p-6 flex flex-col">
@@ -649,7 +866,7 @@
                         </div>
                         <!-- JobWatch App -->
                         <div class="border-2 border-energy-blue rounded-lg p-6 flex flex-col relative">
-                             <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 inline-block bg-energy-blue text-white text-xs font-bold px-3 py-1 rounded-full">ROAD USER</span>
+                            <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 inline-block bg-energy-blue text-white text-xs font-bold px-3 py-1 rounded-full">ROAD USER</span>
                             <h3 class="text-2xl font-bold text-navy">JobWatch App</h3>
                             <p class="text-gray-600 text-sm mt-1 flex-grow">Full access to the JobWatch mobile app, with free hardwired vehicle tracking included.</p>
                             <p class="text-4xl font-extrabold my-4 text-navy">£79.95 <span class="text-base font-medium text-gray-500">/user/month</span></p>
@@ -660,11 +877,11 @@
                         </div>
                         <!-- JobWatch Plus -->
                         <div class="border rounded-lg p-6 flex flex-col relative">
-                             <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 inline-block bg-energy-blue text-white text-xs font-bold px-3 py-1 rounded-full">ROAD USER</span>
+                            <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 inline-block bg-energy-blue text-white text-xs font-bold px-3 py-1 rounded-full">ROAD USER</span>
                             <h3 class="text-2xl font-bold text-navy">JobWatch Plus</h3>
                             <p class="text-gray-600 text-sm mt-1 flex-grow">Everything in the JobWatch App, plus a complete hardware and data bundle for your road users.</p>
-                             <p class="text-4xl font-extrabold my-4 text-navy">£99.95 <span class="text-base font-medium text-gray-500">/user/month</span></p>
-                             <ul class="text-gray-700 space-y-2 text-sm">
+                            <p class="text-4xl font-extrabold my-4 text-navy">£99.95 <span class="text-base font-medium text-gray-500">/user/month</span></p>
+                            <ul class="text-gray-700 space-y-2 text-sm">
                                 <li class="flex items-start"><span class="icon text-green-accent text-base mr-2">check</span>Rugged tablet or smartphone with 500mb data sim</li>
                                 <li class="flex items-start"><span class="icon text-green-accent text-base mr-2">check</span>Device management and lockdown software</li>
                                 <li class="flex items-start"><span class="icon text-green-accent text-base mr-2">check</span>Driver cradle, free installation & 2 years warranty</li>
@@ -674,7 +891,7 @@
                     
                     <div class="border-t pt-6 mt-6">
                         <h3 class="text-2xl font-bold text-center text-navy mb-4">Onboarding & Support Packages</h3>
-                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div class="bg-gray-50 p-4 rounded-lg text-center">
                                 <h4 class="font-bold text-lg text-navy">Advanced</h4>
                                 <p class="text-2xl font-bold text-energy-blue my-1">£100<span class="text-sm font-medium">/month</span></p>
@@ -698,7 +915,7 @@
             </section>
             <div class="page-break"></div>
             
-            <!-- Slide 13: Security -->
+            <!-- Slide 15: Security -->
             <section id="security" class="slide">
                 <div class="container mx-auto px-4 md:px-8">
                     <div class="text-center">
@@ -714,11 +931,11 @@
                                 <h3 class="text-2xl font-bold text-navy mb-2">Our Commitment to Security</h3>
                                 <p class="text-gray-700 text-sm">We embed security into our culture. Through continuous investment, we hold key industry standards to provide confidence that your information is secure.</p>
                             </div>
-                             <div class="border-t pt-4">
+                            <div class="border-t pt-4">
                                 <h3 class="text-2xl font-bold text-navy mb-2">Robust & Resilient Architecture</h3>
                                 <p class="text-gray-700 text-sm">We partner with the leader in cloud platforms, AWS, to deliver a world-class service. Our cloud architecture provides a multi-region, multi-datacentre solution that leverages automation and "designing for failure" from inception.</p>
                             </div>
-                             <div class="border-t pt-4">
+                            <div class="border-t pt-4">
                                 <h3 class="text-xl font-bold text-navy mb-3">Key Security Controls:</h3>
                                 <div class="grid grid-cols-2 gap-4 text-sm">
                                     <div class="flex items-start"><span class="icon text-energy-blue mr-2">enhanced_encryption</span><div><strong>Encryption:</strong> All data is encrypted at-rest and in-transit.</div></div>
@@ -731,12 +948,12 @@
 
                         <!-- Right Column -->
                         <div class="lg:col-span-2 space-y-4">
-                           <img src="https://iili.io/K13c25b.md.png" alt="System Architecture" class="rounded-lg shadow-lg w-full h-auto">
-                           <div class="flex justify-center items-center gap-4 bg-white p-3 rounded-lg shadow-md">
-                               <img src="https://iili.io/K13cddu.md.png" alt="AWS Logo" class="h-10">
-                               <img src="https://iili.io/K13c919.png" alt="ISO 27001 Logo" class="h-12">
-                               <img src="https://iili.io/K13cHge.png" alt="ISO 9001 Logo" class="h-12">
-                           </div>
+                            <img src="https://iili.io/K13c25b.md.png" alt="System Architecture" class="rounded-lg shadow-lg w-full h-auto">
+                            <div class="flex justify-center items-center gap-4 bg-white p-3 rounded-lg shadow-md">
+                                <img src="https://iili.io/K13cddu.md.png" alt="AWS Logo" class="h-10">
+                                <img src="https://iili.io/K13c919.png" alt="ISO 27001 Logo" class="h-12">
+                                <img src="https://iili.io/K13cHge.png" alt="ISO 9001 Logo" class="h-12">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -745,7 +962,7 @@
             <div class="page-break"></div>
         </main>
 
-        <!-- Slide 14: Contact -->
+        <!-- Slide 16: Contact -->
         <footer id="contact" class="slide bg-navy text-white">
             <div class="container mx-auto px-4 md:px-8 text-center">
                 <img src="https://i.postimg.cc/ydbgqXFm/Big-Change-White.png" alt="BigChange Logo" class="h-10 mx-auto mb-4">
@@ -757,6 +974,7 @@
         <div class="page-break"></div>
     </div>
 
+    <script src="https://player.vimeo.com/api/player.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const container = document.querySelector('.presentation-container');
@@ -774,17 +992,19 @@
                 'workflow': 'Connected Workflow',
                 'ai-first': 'AI-First',
                 'implementation': 'Implementation',
-                'timeline': 'Timeline & Support',
+                'timeline': 'Timeline',
+                'support': 'UK Support',
+                'community': 'Community',
                 'pricing': 'Pricing',
                 'security': 'Security',
                 'contact': 'Contact'
             };
 
             Object.keys(sectionMap).forEach(id => {
-                 const name = sectionMap[id];
-                 const listItem = document.createElement('li');
-                 listItem.innerHTML = `<a href="#${id}" data-target-id="${id}"></a><span class="tooltip">${name}</span>`;
-                 navList.appendChild(listItem);
+                const name = sectionMap[id];
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<a href="#${id}" data-target-id="${id}"></a><span class="tooltip">${name}</span>`;
+                navList.appendChild(listItem);
             });
 
             const navLinks = document.querySelectorAll('#side-nav a');
@@ -807,7 +1027,7 @@
             // Counter animation
             const benefitsSection = document.getElementById('benefits');
             if (benefitsSection) {
-                 const counterObserver = new IntersectionObserver((entries) => {
+                const counterObserver = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
                             entry.target.querySelectorAll('.counter').forEach(counter => {
@@ -835,17 +1055,18 @@
             if (ganttBars.length > 0) {
                 const ganttTitle = document.getElementById('gantt-title'), ganttTimeline = document.getElementById('gantt-timeline'), ganttDescription = document.getElementById('gantt-description');
                 const updateDetails = (bar) => {
-                    if(!bar) return;
+                    if(!bar || !ganttTitle) return; // Add guards
                     ganttTitle.textContent = bar.dataset.title;
                     ganttTimeline.textContent = bar.dataset.timeline;
                     ganttDescription.textContent = bar.dataset.description;
                     ganttBars.forEach(b => b.classList.remove('active'));
-                    bar.classList.add('active');};
+                    bar.classList.add('active');
+            };
                 ganttBars.forEach(bar => bar.addEventListener('click', () => updateDetails(bar)));
                 updateDetails(document.querySelector('.gantt-bar.active'));
             }
 
-             // Feature Hub Logic
+            // Feature Hub Logic
             const hub = document.getElementById('platform-hub');
             const featureDisplayContent = document.getElementById('feature-display-content');
             if(hub && featureDisplayContent) {
@@ -899,8 +1120,8 @@
             }
 
             // AI Graphic animation
-            const aiGraphic = document.getElementById('ai-graphic-container');
-            if(aiGraphic) {
+            const aiGraphicContainer = document.getElementById('ai-graphic-container');
+            if(aiGraphicContainer) {
                 const pointsContainer = document.getElementById('ai-points');
                 const pathsContainer = document.getElementById('ai-paths');
                 const points = [
@@ -912,7 +1133,7 @@
                     { name: 'Comms', icon: 'sms', radius: 220, angle: 210 }
                 ];
                 
-                const radius = aiGraphic.offsetWidth / 2;
+                const radius = aiGraphicContainer.offsetWidth / 2;
                 
                 points.forEach(point => {
                     const angleRad = point.angle * Math.PI / 180;
@@ -952,3 +1173,4 @@
 
 </body>
 </html>
+
